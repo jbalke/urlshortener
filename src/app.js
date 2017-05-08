@@ -38,11 +38,11 @@ app.get('/', (req, res) => {
         userStory1: 'I can pass a URL as a parameter and I will receive a shortened URL in the JSON response.',
         userStory2: 'When I visit that shortened URL, it will redirect me to my original link.',
         section1: 'Creation Example',
-        content1: 'https://www.xyz.com/new/https://www.google.com',
+        content1: createFullUrl(req, "new/http://www.google.com"),
         section2: 'Output Example',
-        content2: '{"message":"Url successfully shortened","url":"http://www.xyz/2"}',
+        content2: `{"message":"Url successfully shortened","url":"${createFullUrl(req, 2)}`,
         section3: 'Usage Example',
-        content3: 'https://www.xyz.com/2',
+        content3: createFullUrl(req, 2),
         section4: 'Will redirect to:',
         content4: 'http://www.google.com'
     });
@@ -56,7 +56,7 @@ app.get('/new/*', (req, res) => {
             if (shortCode) {        
                 res.status(200).json({          
                     error: 'URL already exists in the database.',
-                              url: `http://www.example.com/${shortCode}`        
+                              url: createFullUrl(req, shortCode)        
                 });      
             } else {         // If it's not a duplicate, we insert a new document here.
                 insertUrl(url).then(insertedDoc => {
