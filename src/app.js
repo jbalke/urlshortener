@@ -40,9 +40,9 @@ app.get('/', (req, res) => {
         section1: 'Creation Example',
         content1: 'https://little-url.herokuapp.com/new/https://www.google.com',
         section2: 'Output Example',
-        content2: 'http://www.xyz.com/2',
+        content2: '{ "original":"http://www.google.com", "shortCode":"https://little-url.herokuapp.com/8170" }',
         section3: 'Usage Example',
-        content3: 'https://little-url.herokuapp.com/new/https://www.google.com',
+        content3: 'https://www.xyz.com/2',
         section4: 'Will redirect to:',
         content4: 'http://www.google.com'
     });
@@ -65,7 +65,7 @@ app.get('/new/*', (req, res) => {
                             error: 'Unknown Error'
                         });
                     } else {
-                        res.status(200).send(`URL successfully shortened: http://www.xyz.com/${insertedDoc.shortCode}`);
+                        res.status(200).json({ message: 'Url successfully shortened', url: createFullUrl(req, insertedDoc.shortCode) });
                     }
                 })      
             }    
@@ -77,6 +77,22 @@ app.get('/new/*', (req, res) => {
     }
 
 });
+
+app.get('/:shortCode', (req, res) => {
+    let shortCode = parseInt(req.params.shortCode);
+
+    if (isNaN(shortCode)) {
+        res.status(200).json({ error: 'Invalid URL shortcode, must be a number.' });
+    } else {
+        UrlEntry.findOne({ shortCode: shortCode }).then(doc => {
+            if (!doc) {
+                res.status(404).json({ error: 'Page not found.'});
+            } else {
+                res.redirect(doc.original);
+            }
+        })
+    }
+})
 
 function isDuplicateUrl(url) {
 
@@ -119,6 +135,14 @@ function insertUrl(url) {
         });
         return newUrl.save();
     })
+}
+
+function createFullUrl(req, url) {
+  return `${req.protocol}://${req.hostname}:${getPort()}/${url}`;
+}
+
+function getPort() {
+  return process.env.PORT || 3000;
 }
 
 module.exports = app;
