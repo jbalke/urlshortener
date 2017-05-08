@@ -27,8 +27,25 @@ urlEntrySchema.set('autoIndex', false);
 
 var UrlEntry = mongoose.model('UrlEntry', urlEntrySchema);
 
+app.set('view engine', 'pug');
+app.set('views', './views');
+
 app.get('/', (req, res) => {
-    res.status(200).send('URL Shortener Microservice');
+    res.status(200).render('index', {
+        title: 'URL Shortener Microservice',
+        app: 'FreeCodeCamp API Basejump: URL Shortener Microservice',
+        usage: 'User Stories',
+        userStory1: 'I can pass a URL as a parameter and I will receive a shortened URL in the JSON response.',
+        userStory2: 'When I visit that shortened URL, it will redirect me to my original link.',
+        section1: 'Creation Example',
+        content1: 'https://little-url.herokuapp.com/new/https://www.google.com',
+        section2: 'Output Example',
+        content2: 'http://www.xyz.com/2',
+        section3: 'Usage Example',
+        content3: 'https://little-url.herokuapp.com/new/https://www.google.com',
+        section4: 'Will redirect to:',
+        content4: 'http://www.google.com'
+    });
 });
 
 app.get('/new/*', (req, res) => {
