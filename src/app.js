@@ -2,7 +2,10 @@ const app = require('express')();
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('localhost/urlShortener');
+//mongoose.connect('localhost/urlShortener');
+
+var mongoUrl = process.env.MONGOLAB_URI;
+mongoose.connect(mongoUrl);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
