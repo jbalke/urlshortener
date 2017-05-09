@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
         section1: 'Creation Example',
         content1: genFullUrl(req, "new/http://www.google.com"),
         section2: 'Output Example',
-        content2: `{"message":"Url successfully shortened","url":"${genFullUrl(req, 2)}`,
+        content2: `{"message":"Url successfully shortened","url":"${genFullUrl(req, 2)}}`,
         section3: 'Usage Example',
         content3: genFullUrl(req, 2),
         section4: 'Will redirect to:',
